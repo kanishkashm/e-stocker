@@ -3,10 +3,12 @@ using IdentityServer.Configuration;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddIdentityServer()
+    .AddInMemoryApiScopes(InMemoryConfig.GetApiScopes())
+    .AddInMemoryApiResources(InMemoryConfig.GetApiResources())
     .AddInMemoryIdentityResources(InMemoryConfig.GetIdentityResources())
-        .AddTestUsers(InMemoryConfig.GetUsers())
-        .AddInMemoryClients(InMemoryConfig.GetClients())
-        .AddDeveloperSigningCredential();
+    .AddTestUsers(InMemoryConfig.GetUsers())
+    .AddInMemoryClients(InMemoryConfig.GetClients())
+    .AddDeveloperSigningCredential();
 
 // Add services to the container.
 
