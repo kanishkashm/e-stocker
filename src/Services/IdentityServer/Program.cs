@@ -1,4 +1,12 @@
+using IdentityServer.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddIdentityServer()
+    .AddInMemoryIdentityResources(InMemoryConfig.GetIdentityResources())
+        .AddTestUsers(InMemoryConfig.GetUsers())
+        .AddInMemoryClients(InMemoryConfig.GetClients())
+        .AddDeveloperSigningCredential();
 
 // Add services to the container.
 
@@ -15,6 +23,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseIdentityServer();
 
 app.UseHttpsRedirection();
 
