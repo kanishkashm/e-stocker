@@ -10,6 +10,7 @@ builder.Services.AddIdentityServer()
 
 // Add services to the container.
 
+builder.Services.AddControllersWithViews();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -24,11 +25,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseStaticFiles();
+app.UseRouting();
+
 app.UseIdentityServer();
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapDefaultControllerRoute();
+});
 
 app.MapControllers();
 
