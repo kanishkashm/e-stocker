@@ -80,7 +80,7 @@ namespace IdentityServer.Configuration
                     ClientId = "eStoker",
                     ClientSecrets = new [] { new Secret("eStokerSecret".Sha512()) },
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
-                    AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, "eStokerApi" }
+                    AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, "eStokerApi", "roles" }
                 }
             };
 

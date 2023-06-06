@@ -4,7 +4,7 @@ builder.Services.AddAuthentication("Bearer")
    .AddJwtBearer("Bearer", opt =>
    {
        opt.RequireHttpsMetadata = false;
-       opt.Authority = "https://localhost:7000";
+       opt.Authority = "https://localhost:7000"; //to do get this url from config
        opt.Audience = "eStokerApi";
    });
 
