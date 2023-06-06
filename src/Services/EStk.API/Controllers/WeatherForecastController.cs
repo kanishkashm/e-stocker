@@ -20,6 +20,7 @@ namespace EStk.API.Controllers
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
+        //[Authorize(Roles = ("Admin"))]
         [Authorize]
         public IEnumerable<WeatherForecast> Get()
         {
