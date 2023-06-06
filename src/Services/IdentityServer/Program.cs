@@ -1,22 +1,36 @@
-using IdentityServer.Configuration;
+using IdentityServer.Data;
 using IdentityServer.Extensions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = builder.Configuration.GetConnectionString("sqlConnection");
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlServer(connectionString));
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
+{
+    opt.SignIn.RequireConfirmedEmail = false;
+})
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+
 var migrationAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
 builder.Services.AddIdentityServer()
-    .AddTestUsers(InMemoryConfig.GetUsers())
+    //.AddTestUsers(InMemoryConfig.GetUsers())
+    .AddAspNetIdentity<ApplicationUser>()
     .AddDeveloperSigningCredential() //not something we want to use in a production environment
     .AddConfigurationStore(opt =>
     {
-        opt.ConfigureDbContext = c => c.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"),
+        opt.ConfigureDbContext = c => c.UseSqlServer(connectionString,
             sql => sql.MigrationsAssembly(migrationAssembly));
     })
     .AddOperationalStore(opt =>
     {
-        opt.ConfigureDbContext = o => o.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"),
+        opt.ConfigureDbContext = o => o.UseSqlServer(connectionString,
             sql => sql.MigrationsAssembly(migrationAssembly));
     });
 //.AddInMemoryApiScopes(InMemoryConfig.GetApiScopes())
