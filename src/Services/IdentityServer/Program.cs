@@ -1,7 +1,18 @@
+using IdentityServer.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddIdentityServer()
+    .AddInMemoryApiScopes(InMemoryConfig.GetApiScopes())
+    .AddInMemoryApiResources(InMemoryConfig.GetApiResources())
+    .AddInMemoryIdentityResources(InMemoryConfig.GetIdentityResources())
+    .AddTestUsers(InMemoryConfig.GetUsers())
+    .AddInMemoryClients(InMemoryConfig.GetClients())
+    .AddDeveloperSigningCredential();
 
 // Add services to the container.
 
+builder.Services.AddControllersWithViews();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -16,9 +27,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseStaticFiles();
+app.UseRouting();
+
+app.UseIdentityServer();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapDefaultControllerRoute();
+});
 
 app.MapControllers();
 

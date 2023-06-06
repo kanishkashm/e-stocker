@@ -1,5 +1,13 @@
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddAuthentication("Bearer")
+   .AddJwtBearer("Bearer", opt =>
+   {
+       opt.RequireHttpsMetadata = false;
+       opt.Authority = "https://localhost:7000";
+       opt.Audience = "eStokerApi";
+   });
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -17,6 +25,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
