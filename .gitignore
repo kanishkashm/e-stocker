@@ -348,3 +348,4 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/src/WebApps/web-app/.angular/cache/15.2.8/angular-webpack/a5a5386b61479647a936b50b2b0ee3d3b180fcef
