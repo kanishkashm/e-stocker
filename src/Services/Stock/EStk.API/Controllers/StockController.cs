@@ -1,4 +1,5 @@
 ﻿using EStk.API.Data;
+using EStk.API.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,9 @@ namespace EStk.API.Controllers
                     new Item { Id = 8, Name = "Item 8", Price = 800, StockId = 1 },
                     new Item { Id = 9, Name = "Item 9", Price = 900, StockId = 2 }
                 };
+
+        const string ETAG_HEADER = "ETag";
+        const string MATCH_HEADER = "If-Match";
 
         public StockController() { }
 
@@ -51,6 +55,40 @@ namespace EStk.API.Controllers
             stckItem.Price = item.Price;
             stckItem.StockId = item.StockId;
             return Ok(StockItems);
+        }
+
+        [HttpGet("stock")]
+        [AllowAnonymous]
+        public IActionResult GetStock(int stockId)
+        {
+            var stockItems = StockItems.Where(x => x.StockId == stockId).ToList();
+            var stock = new Stock { Id = stockId, Items = stockItems };
+            var eTag = HashFactory.GetHash(stock);
+            HttpContext.Response.Headers.Add(ETAG_HEADER, eTag);
+            if (HttpContext.Request.Headers.ContainsKey(MATCH_HEADER) &&
+              HttpContext.Request.Headers[MATCH_HEADER].RemoveQuotes() == eTag)
+                return new StatusCodeResult(StatusCodes.Status304NotModified);
+            return Ok(stock);
+        }
+
+        [HttpPut("stock")]
+        [AllowAnonymous]
+        public IActionResult IssueStock(int stockId, Stock stock)
+        {
+            var stockItems = StockItems.Where(x => x.StockId == stockId).ToList();
+            var stockFromSaved = new Stock { Id = stockId, Items = stockItems };
+            var eTag = HashFactory.GetHash(stockFromSaved);
+            if (!HttpContext.Request.Headers.ContainsKey(MATCH_HEADER) ||
+              HttpContext.Request.Headers[MATCH_HEADER].RemoveQuotes() != eTag)
+            {
+                return new StatusCodeResult(StatusCodes.Status412PreconditionFailed);
+            }
+            else
+            {
+                
+            }
+
+            return NoContent();
         }
     }
 }
