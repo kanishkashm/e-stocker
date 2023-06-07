@@ -1,8 +1,11 @@
 ﻿using Estk.Core.Domain;
 using Estk.Core.Features.StockItem.Command.AddStockItem;
+using Estk.Core.Features.StockItem.Command.IssueStock;
 using Estk.Core.Features.StockItem.Command.UpdateStockItem;
 using Estk.Core.Features.StockItem.Query.GetStockItems;
+using EStk.API.Data;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -10,6 +13,7 @@ namespace EStk.API.Controllers
 {
     [Route("api/v2/Stock")]
     [ApiController]
+    [Authorize]
     public class StockV2Controller : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -20,7 +24,7 @@ namespace EStk.API.Controllers
         }
 
         [HttpGet("{stockId}")]
-        //[Authorize(Roles = ("Admin,User,Auditor"))]
+        [Authorize(Roles = ("Admin,User,Auditor"))]
         public async Task<ActionResult> Get(int stockId)
         {
             var query = new GetStockItemsQuery(stockId);
@@ -29,37 +33,35 @@ namespace EStk.API.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = ("Admin"))]
+        [Authorize(Roles = ("Admin"))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async  Task<ActionResult<int>> Post([FromBody] StockCommand command)
+        public async Task<ActionResult<int>> Post([FromBody] StockCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
         }
 
-        [HttpPut]
-        //[Authorize(Roles = ("Admin,User"))]
+        [HttpPut("{itemId}", Name = "UpdateStockItem")]
+        [Authorize(Roles = ("Admin,User"))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Put(int itemId, [FromBody] Item item)
+        public async Task<ActionResult> UpdateStockItem(int itemId, [FromBody] UpdateStockItemCommand item)
         {
-            var updateCommand = new UpdateStockItemCommand
-            {
-                Id = itemId,
-                Name = item.Name,
-                Price = item.Price,
-            };
-            await _mediator.Send(updateCommand);
+            item.Id = itemId;
+            await _mediator.Send(item);
             return NoContent();
         }
 
 
 
-        //[HttpPut("issueStock/{stockId}")]
-        //public async Task<IActionResult> IssueStock(int? stockId, byte[] rowVersion)
-        //{
-
-        //}
+        [HttpPut("issueStock/{stockId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> IssueStock(int? stockId, [FromBody] IssueStockCommand issueStock)
+        {
+            issueStock.StockId = stockId.Value;
+            await _mediator.Send(issueStock);
+            return NoContent();
+        }
     }
 }

@@ -22,7 +22,7 @@ namespace Estk.Core.Features.StockItem.Command.UpdateStockItem
             if (item == null)
             {
                 _logger.LogError($"Item not exist on database.");
-                throw new ApplicationException($"Item not exist on database. item code: {request.Id}");
+                throw new ApplicationException($"Item not exist on database. item id: {request.Id}");
             }
 
             item.Name = request.Name;
