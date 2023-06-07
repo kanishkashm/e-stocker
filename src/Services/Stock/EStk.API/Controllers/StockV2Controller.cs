@@ -1,7 +1,9 @@
 ﻿using Estk.Core.Domain;
 using Estk.Core.Features.StockItem.Command.AddStockItem;
+using Estk.Core.Features.StockItem.Command.IssueStock;
 using Estk.Core.Features.StockItem.Command.UpdateStockItem;
 using Estk.Core.Features.StockItem.Query.GetStockItems;
+using EStk.API.Data;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -51,10 +53,12 @@ namespace EStk.API.Controllers
 
 
 
-        //[HttpPut("issueStock/{stockId}")]
-        //public async Task<IActionResult> IssueStock(int? stockId, byte[] rowVersion)
-        //{
-
-        //}
+        [HttpPut("issueStock/{stockId}")]
+        public async Task<IActionResult> IssueStock(int? stockId, [FromBody] IssueStockCommand issueStock)
+        {
+            issueStock.StockId = stockId.Value;
+            await _mediator.Send(issueStock);
+            return NoContent();
+        }
     }
 }
