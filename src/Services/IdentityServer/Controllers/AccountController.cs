@@ -1,12 +1,10 @@
-﻿using IdentityModel;
-using IdentityServer.Data;
+﻿using IdentityServer.Data;
 using IdentityServer.Model;
 using IdentityServer4.Services;
 using IdentityServerHost.Quickstart.UI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace EStk.API.Controllers
 {
@@ -132,7 +130,24 @@ namespace EStk.API.Controllers
             {
                 throw new Exception($"{ex.Message}", ex);
             }
-            return Ok();
+        }
+
+        [HttpGet("AddUserRoles")]
+        public async Task<IActionResult> AddUserRoles()
+        {
+            string[] roleNames = { "Admin", "User", "Auditor" };
+            List<IdentityResult> roleResult = new List<IdentityResult>();
+
+            foreach (var roleName in roleNames)
+            {
+                var roleExist = await _roleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    //create the roles and seed them to the database: Question 1
+                    roleResult.Add((await _roleManager.CreateAsync(new IdentityRole(roleName))));
+                }
+            }
+            return Ok(roleResult);
         }
 
         
