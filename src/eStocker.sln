@@ -19,11 +19,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{8ECD4F21-C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{8433F610-2E18-44E0-BE16-68B029B1C82D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Estk.Core.Domain", "Services\Stock\Core\Estk.Core.Domain\Estk.Core.Domain.csproj", "{57F1E5E4-39B3-4D56-B22C-5E7734A58B73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Estk.Core.Domain", "Services\Stock\Core\Estk.Core.Domain\Estk.Core.Domain.csproj", "{57F1E5E4-39B3-4D56-B22C-5E7734A58B73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Estk.Infrastructure", "Services\Stock\Infrastructure\Estk.Infrastructure\Estk.Infrastructure.csproj", "{53776B24-928B-400C-BEC4-26EE950AAA83}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Estk.Infrastructure", "Services\Stock\Infrastructure\Estk.Infrastructure\Estk.Infrastructure.csproj", "{53776B24-928B-400C-BEC4-26EE950AAA83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Estk.Core", "Services\Stock\Core\Estk.Core\Estk.Core.csproj", "{A440C2E5-236C-4C81-9570-39594B9E9936}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Estk.Core", "Services\Stock\Core\Estk.Core\Estk.Core.csproj", "{A440C2E5-236C-4C81-9570-39594B9E9936}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{97ED75F6-7BB5-4F2F-AA24-3C8D169F937C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{A440C2E5-236C-4C81-9570-39594B9E9936}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A440C2E5-236C-4C81-9570-39594B9E9936}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A440C2E5-236C-4C81-9570-39594B9E9936}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97ED75F6-7BB5-4F2F-AA24-3C8D169F937C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97ED75F6-7BB5-4F2F-AA24-3C8D169F937C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97ED75F6-7BB5-4F2F-AA24-3C8D169F937C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97ED75F6-7BB5-4F2F-AA24-3C8D169F937C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
