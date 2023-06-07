@@ -31,26 +31,21 @@ namespace EStk.API.Controllers
         [HttpPost]
         //[Authorize(Roles = ("Admin"))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async  Task<ActionResult<int>> Post([FromBody] StockCommand command)
+        public async Task<ActionResult<int>> Post([FromBody] StockCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
         }
 
-        [HttpPut]
+        [HttpPut("{itemId}", Name = "UpdateStockItem")]
         //[Authorize(Roles = ("Admin,User"))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Put(int itemId, [FromBody] Item item)
+        public async Task<ActionResult> UpdateStockItem(int itemId, [FromBody] UpdateStockItemCommand item)
         {
-            var updateCommand = new UpdateStockItemCommand
-            {
-                Id = itemId,
-                Name = item.Name,
-                Price = item.Price,
-            };
-            await _mediator.Send(updateCommand);
+            item.Id = itemId;
+            await _mediator.Send(item);
             return NoContent();
         }
 
