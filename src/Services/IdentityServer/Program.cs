@@ -1,10 +1,12 @@
 using IdentityServer.Data;
 using IdentityServer.Extensions;
+using IdentityServer.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.ConfigureCors();
 
 var connectionString = builder.Configuration.GetConnectionString("sqlConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -12,6 +14,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
 {
+    opt.Password.RequireDigit = false; //only dev development 
+    opt.Password.RequiredLength = 4;
+    opt.Password.RequireNonAlphanumeric = false;
+    opt.Password.RequireUppercase = false;
+    opt.Password.RequireLowercase = false;
     opt.SignIn.RequireConfirmedEmail = false;
 })
     .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -23,6 +30,7 @@ builder.Services.AddIdentityServer()
     //.AddTestUsers(InMemoryConfig.GetUsers())
     .AddAspNetIdentity<ApplicationUser>()
     .AddDeveloperSigningCredential() //not something we want to use in a production environment
+    .AddProfileService<CustomProfileService>()
     .AddConfigurationStore(opt =>
     {
         opt.ConfigureDbContext = c => c.UseSqlServer(connectionString,
@@ -58,6 +66,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("CorsPolicy");
 
 app.UseStaticFiles();
 app.UseRouting();

@@ -1,4 +1,8 @@
+using EStk.API.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.ConfigureCors();
 
 builder.Services.AddAuthentication("Bearer")
    .AddJwtBearer("Bearer", opt =>
@@ -23,6 +27,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 

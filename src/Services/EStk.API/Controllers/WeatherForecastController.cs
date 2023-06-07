@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EStk.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -20,8 +20,8 @@ namespace EStk.API.Controllers
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        //[Authorize(Roles = ("Admin"))]
-        [Authorize]
+        [Authorize(Roles = ("Admin"))]
+        //[Authorize]
         public IEnumerable<WeatherForecast> Get()
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
