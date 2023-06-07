@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Features\Clients\**" />
+    <Compile Remove="Features\Order\**" />
+    <Compile Remove="Features\StkItem\**" />
+    <EmbeddedResource Remove="Features\Clients\**" />
+    <EmbeddedResource Remove="Features\Order\**" />
+    <EmbeddedResource Remove="Features\StkItem\**" />
+    <None Remove="Features\Clients\**" />
+    <None Remove="Features\Order\**" />
+    <None Remove="Features\StkItem\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Estk.Core.Domain\Estk.Core.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
