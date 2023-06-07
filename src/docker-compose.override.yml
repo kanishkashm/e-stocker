@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  dbserver:
+    container_name: dbserver
+    environment:
+        SA_PASSWORD: "admin123456"
+        ACCEPT_EULA: "Y"
+    restart: always
+    ports:
+      - "1433:1433"
+
+  identityserver:
+    container_name: identityserver
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:sqlConnection=Data Source=dbserver;Initial Catalog=EStockerIdentityServerDb;User ID=sa;Password=admin123456"
+    depends_on:
+      - dbserver
+    ports:
+      - "8000:80"
+
+  estk.api:
+    container_name: estk.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:sqlConnection=Data Source=dbserver;Initial Catalog=EStockerDb;User ID=sa;Password=admin12345"
+      - "AuthSeeting:AuthorityUrl=http://identityserver"
+    depends_on:
+      - dbserver
+    ports:
+      - "8001:80"
