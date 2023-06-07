@@ -5,6 +5,7 @@ using Estk.Core.Features.StockItem.Command.UpdateStockItem;
 using Estk.Core.Features.StockItem.Query.GetStockItems;
 using EStk.API.Data;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -12,6 +13,7 @@ namespace EStk.API.Controllers
 {
     [Route("api/v2/Stock")]
     [ApiController]
+    [Authorize]
     public class StockV2Controller : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -22,7 +24,7 @@ namespace EStk.API.Controllers
         }
 
         [HttpGet("{stockId}")]
-        //[Authorize(Roles = ("Admin,User,Auditor"))]
+        [Authorize(Roles = ("Admin,User,Auditor"))]
         public async Task<ActionResult> Get(int stockId)
         {
             var query = new GetStockItemsQuery(stockId);
@@ -31,7 +33,7 @@ namespace EStk.API.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = ("Admin"))]
+        [Authorize(Roles = ("Admin"))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<ActionResult<int>> Post([FromBody] StockCommand command)
         {
@@ -40,7 +42,7 @@ namespace EStk.API.Controllers
         }
 
         [HttpPut("{itemId}", Name = "UpdateStockItem")]
-        //[Authorize(Roles = ("Admin,User"))]
+        [Authorize(Roles = ("Admin,User"))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
@@ -54,6 +56,7 @@ namespace EStk.API.Controllers
 
 
         [HttpPut("issueStock/{stockId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> IssueStock(int? stockId, [FromBody] IssueStockCommand issueStock)
         {
             issueStock.StockId = stockId.Value;

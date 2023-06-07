@@ -2,6 +2,7 @@
 using EStk.Core.Contracts;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Collections;
 
 namespace Estk.Core.Features.StockItem.Command.IssueStock
 {
@@ -24,7 +25,8 @@ namespace Estk.Core.Features.StockItem.Command.IssueStock
                 _logger.LogError($"Stock not exist on database.");
                 throw new ApplicationException($"Stock not exist on database. stock id: {request.StockId}");
             }
-            if(stock.RowVersion != request.RowVersion)
+            if(!StructuralComparisons.StructuralEqualityComparer.Equals(stock.RowVersion, request.RowVersion)
+                || !stock.Availability)
             {
                 _logger.LogError($"Stock is not available. It was already taken by someone else :(");
                 throw new ApplicationException($"Stock is not available. It was already taken by someone else :(. stock id: {request.StockId}");
